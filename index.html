@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#111827">
+
+<title>Smart Calculator</title>
+
+<!-- App icon created inside the code -->
+<link rel="icon"
+href="data:image/svg+xml,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+<rect width='512' height='512' rx='100' fill='%23111827'/>
+<rect x='105' y='75' width='302' height='362' rx='35' fill='white'/>
+<rect x='135' y='105' width='242' height='75' rx='15' fill='%23e5e7eb'/>
+<circle cx='165' cy='225' r='25' fill='%23111827'/>
+<circle cx='256' cy='225' r='25' fill='%23111827'/>
+<circle cx='347' cy='225' r='25' fill='%23111827'/>
+<circle cx='165' cy='300' r='25' fill='%23111827'/>
+<circle cx='256' cy='300' r='25' fill='%23111827'/>
+<circle cx='347' cy='300' r='25' fill='%23111827'/>
+<circle cx='165' cy='375' r='25' fill='%23111827'/>
+<circle cx='256' cy='375' r='25' fill='%23111827'/>
+<circle cx='347' cy='375' r='25' fill='%23111827'/>
+</svg>">
+
+<style>
+
+/* =========================
+   BASIC SETTINGS
+========================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #e5e7eb;
+    color: #111827;
+    min-height: 100vh;
+}
+
+/* =========================
+   MAIN APP
+========================= */
+
+.app {
+    width: 100%;
+    max-width: 500px;
+    min-height: 100vh;
+    margin: auto;
+    background: #f8fafc;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    background: #111827;
+    color: white;
+    padding: 25px 20px;
+    text-align: center;
+}
+
+.app-icon {
+    width: 78px;
+    height: 78px;
+    background: white;
+    border-radius: 22px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.icon-body {
+    width: 48px;
+    height: 58px;
+    background: #111827;
+    border-radius: 10px;
+    padding: 7px;
+}
+
+.icon-screen {
+    height: 14px;
+    background: white;
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+
+.icon-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+}
+
+.icon-buttons span {
+    height: 6px;
+    background: white;
+    border-radius: 2px;
+}
+
+.header h1 {
+    margin-top: 13px;
+    font-size: 24px;
+}
+
+.header p {
+    margin-top: 5px;
+    color: #cbd5e1;
+    font-size: 13px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content {
+    padding: 20px;
+    padding-bottom: 100px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* =========================
+   HOME
+========================= */
+
+.welcome {
+    background: #111827;
+    color: white;
+    border-radius: 22px;
+    padding: 27px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.welcome h2 {
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    color: #d1d5db;
+    line-height: 1.6;
+}
+
+.open-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 13px;
+    margin-top: 20px;
+    background: white;
+    color: #111827;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.open-button:active {
+    transform: scale(.97);
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 21px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+.card p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+/* =========================
+   CALCULATOR
+========================= */
+
+.calculator {
+    background: white;
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.calculator-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calculator-title h2 {
+    font-size: 22px;
+}
+
+.calculator-title span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+#display {
+    width: 100%;
+    height: 80px;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    background: #eef2f7;
+    padding: 10px 15px;
+    text-align: right;
+    font-size: 32px;
+    color: #111827;
+    margin-bottom: 15px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.calc-button {
+    height: 62px;
+    border: none;
+    border-radius: 15px;
+    background: #e5e7eb;
+    color: #111827;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .1s;
+}
+
+.calc-button:active {
+    transform: scale(.93);
+}
+
+.operator {
+    background: #dbeafe;
+}
+
+.clear {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.equal {
+    background: #111827;
+    color: white;
+}
+
+/* =========================
+   HISTORY
+========================= */
+
+.history-box {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 18px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+}
+
+.history-box h3 {
+    margin-bottom: 12px;
+}
+
+#history {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.history-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+/* =========================
+   ABOUT
+========================= */
+
+.info-box {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+}
+
+.info-box h2 {
+    margin-bottom: 14px;
+}
+
+.info-box p {
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 14px;
+}
+
+.developer {
+    background: #f1f5f9;
+    border-radius: 14px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.developer strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
+    height: 75px;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    z-index: 100;
+}
+
+.nav-button {
+    border: none;
+    background: white;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.nav-button.active {
+    color: #111827;
+    font-weight: bold;
+}
+
+.nav-icon {
+    display: block;
+    font-size: 23px;
+    margin-bottom: 3px;
+}
+
+/* =========================
+   SMALL PHONES
+========================= */
+
+@media (max-width: 350px) {
+
+    .content {
+        padding: 14px;
+    }
+
+    .calc-button {
+        height: 55px;
+        font-size: 18px;
+    }
+
+    #display {
+        font-size: 27px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================
+         HEADER
+    ====================== -->
+
+    <header class="header">
+
+        <div class="app-icon">
+
+            <div class="icon-body">
+
+                <div class="icon-screen"></div>
+
+                <div class="icon-buttons">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <h1>Smart Calculator</h1>
+
+        <p>Simple • Fast • Free</p>
+
+    </header>
+
+
+    <!-- =====================
+         MAIN CONTENT
+    ====================== -->
+
+    <main class="content">
+
+
+        <!-- HOME -->
+
+        <section
+            id="home"
+            class="page active">
+
+            <div class="welcome">
+
+                <h2>Welcome 👋</h2>
+
+                <p>
+                    Welcome to Smart Calculator.
+                    A simple calculator made for
+                    everyday calculations.
+                </p>
+
+                <button
+                    class="open-button"
+                    onclick="showPage('calculator')">
+
+                    🧮 Open Calculator
+
+                </button>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🧮 Easy Calculations</h3>
+
+                <p>
+                    Add, subtract, multiply and
+                    divide numbers quickly.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>📱 Mobile Friendly</h3>
+
+                <p>
+                    Designed especially for
+                    Android phones and small screens.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>⚡ Fast and Simple</h3>
+
+                <p>
+                    No complicated menus.
+                    Just open the calculator and use it.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>💾 Calculation History</h3>
+
+                <p>
+                    Your recent calculations can
+                    be viewed inside the app.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- CALCULATOR -->
+
+        <section
+            id="calculator"
+            class="page">
+
+            <div class="calculator">
+
+                <div class="calculator-title">
+
+                    <h2>Calculator</h2>
+
+                    <span>Smart Calc</span>
+
+                </div>
+
+
+                <input
+                    id="display"
+                    type="text"
+                    value="0"
+                    readonly
+                >
+
+
+                <div class="buttons">
+
+                    <button
+                        class="calc-button clear"
+                        onclick="clearDisplay()">
+                        AC
+                    </button>
+
+                    <button
+                        class="calc-button"
+                        onclick="deleteLast()">
+                        DEL
+                    </button>
+
+                    <button
+                        class="calc-button operator"
+                        onclick="press('%')">
+                        %
+                    </button>
+
+                    <button
+                        class="calc-button operator"
+                        onclick="press('/')">
+                        ÷
+                    </button>
+
+
+                    <button
+                        class="calc-button"
+                        onclick="press('7')">
+                        7
+                    </button>
+
+                    <button
+                        class="calc-button"
+                        onclick="press('8')">
+                        8
+                    </button>
+
+                    <button
+                        class="calc-button"
+                        onclick="press('9')">
+                        9
+                    </button>
+
+                    <button
+                        class="calc-button operator"
+                        onclick="press('*')">
+                        ×
+                    </button>
+
+
+                    <button
+                        class="calc-button"
+                        onclick="press('4')">
+                        4
+                    </button>
+
+                    <button
+                        class="calc-button"
+                        onclick="press('5')">
+                        5
+                    </button>
+
+                    <button
+                        class="calc-button"
+                        onclick="press('6')">
+                        6
+                    </button>
+
+                    <button
+                        class="calc-button operator"
+                        onclick="press('-')">
+                        −
+                    </button>
+
+
+                    <button
+                        class="calc-button"
+                        onclick="press('1')">
+                        1
+                    </button>
+
+                    <button
+                        class="calc-button"
+                        onclick="press('2')">
+                        2
+                    </button>
+
+                    <button
+                        class="calc-button"
+                        onclick="press('3')">
+                        3
+                    </button>
+
+                    <button
+                        class="calc-button operator"
+                        onclick="press('+')">
+                        +
+                    </button>
+
+
+                    <button
+                        class="calc-button"
+                        onclick="press('0')">
+                        0
+                    </button>
+
+                    <button
+                        class="calc-button"
+                        onclick="press('.')">
+                        .
+                    </button>
+
+                    <button
+                        class="calc-button equal"
+                        style="grid-column: span 2;"
+                        onclick="calculate()">
+                        =
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- HISTORY -->
+
+            <div class="history-box">
+
+                <h3>📋 Recent Calculations</h3>
+
+                <div id="history">
+                    No calculations yet.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ABOUT -->
+
+        <section
+            id="about"
+            class="page">
+
+            <div class="info-box">
+
+                <h2>About Smart Calculator</h2>
+
+                <p>
+                    Smart Calculator is a simple
+                    mobile calculator application
+                    created with HTML, CSS and
+                    JavaScript.
+                </p>
+
+                <p>
+                    The application is designed
+                    to work on mobile phones and
+                    can later be packaged as an
+                    Android application.
+                </p>
+
+                <p>
+                    This project is also being used
+                    to learn how real applications
+                    are created using code.
+                </p>
+
+
+                <div class="developer">
+
+                    <strong>👨‍💻 Developer</strong>
+
+                    John T John
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================
+         BOTTOM NAVIGATION
+    ====================== -->
+
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-button active"
+            onclick="showPage('home')">
+
+            <span class="nav-icon">🏠</span>
+
+            Home
+
+        </button>
+
+
+        <button
+            class="nav-button"
+            onclick="showPage('calculator')">
+
+            <span class="nav-icon">🧮</span>
+
+            Calculator
+
+        </button>
+
+
+        <button
+            class="nav-button"
+            onclick="showPage('about')">
+
+            <span class="nav-icon">ℹ️</span>
+
+            About
+
+        </button>
+
+    </nav>
+
+</div>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+let expression = "";
+
+let history =
+    JSON.parse(
+        localStorage.getItem(
+            "smartCalculatorHistory"
+        )
+    ) || [];
+
+
+const display =
+    document.getElementById("display");
+
+const historyContainer =
+    document.getElementById("history");
+
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function showPage(pageId) {
+
+    document
+        .querySelectorAll(".page")
+        .forEach(function(page) {
+
+            page.classList.remove("active");
+
+        });
+
+
+    document
+        .getElementById(pageId)
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll(".nav-button")
+        .forEach(function(button) {
+
+            button.classList.remove("active");
+
+        });
+
+
+    if (pageId === "home") {
+
+        document
+            .querySelectorAll(".nav-button")[0]
+            .classList.add("active");
+
+    }
+
+
+    if (pageId === "calculator") {
+
+        document
+            .querySelectorAll(".nav-button")[1]
+            .classList.add("active");
+
+    }
+
+
+    if (pageId === "about") {
+
+        document
+            .querySelectorAll(".nav-button")[2]
+            .classList.add("active");
+
+    }
+
+
+    window.scrollTo(0, 0);
+
+}
+
+
+/* =========================
+   CALCULATOR BUTTON
+========================= */
+
+function press(value) {
+
+    if (expression === "Error") {
+
+        expression = "";
+
+    }
+
+    expression += value;
+
+    display.value = expression;
+
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearDisplay() {
+
+    expression = "";
+
+    display.value = "0";
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteLast() {
+
+    if (expression === "Error") {
+
+        expression = "";
+
+    }
+
+    expression =
+        expression.slice(0, -1);
+
+    display.value =
+        expression || "0";
+
+}
+
+
+/* =========================
+   CALCULATE
+========================= */
+
+function calculate() {
+
+    if (!expression) {
+
+        return;
+
+    }
+
+
+    try {
+
+        let calculation =
+            expression.replace(
+                /(\d+(\.\d+)?)%/g,
+                "($1/100)"
+            );
+
+
+        if (
+            !/^[0-9+\-*/().\s]+$/
+            .test(calculation)
+        ) {
+
+            throw new Error();
+
+        }
+
+
+        const result =
+            Function(
+                '"use strict"; return (' +
+                calculation +
+                ')'
+            )();
+
+
+        if (!Number.isFinite(result)) {
+
+            throw new Error();
+
+        }
+
+
+        display.value = result;
+
+
+        addToHistory(
+            expression + " = " + result
+        );
+
+
+        expression =
+            String(result);
+
+    }
+
+    catch {
+
+        display.value = "Error";
+
+        expression = "Error";
+
+    }
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function addToHistory(item) {
+
+    history.unshift(item);
+
+
+    if (history.length > 10) {
+
+        history.pop();
+
+    }
+
+
+    localStorage.setItem(
+        "smartCalculatorHistory",
+        JSON.stringify(history)
+    );
+
+
+    displayHistory();
+
+}
+
+
+function displayHistory() {
+
+    if (history.length === 0) {
+
+        historyContainer.innerHTML =
+            "No calculations yet.";
+
+        return;
+
+    }
+
+
+    historyContainer.innerHTML = "";
+
+
+    history.forEach(function(item) {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "history-item";
+
+        div.textContent = item;
+
+        historyContainer.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+displayHistory();
+
+</script>
+
+</body>
+</html>
